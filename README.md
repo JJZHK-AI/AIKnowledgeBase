@@ -2,7 +2,7 @@ AI基础知识库
 ===
 <head>
 <style type="text/css">
-.thead{
+th{
     font-weight: bold;
     font-size: large
 }
@@ -11,7 +11,7 @@ AI基础知识库
 <body>
 <table>
 <tr>
-<th class="thead">总目</th>
+<th>总目</th>
 </tr>
 </table>
 </body>
