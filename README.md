@@ -1,12 +1,12 @@
 AI基础知识库
 ===
 <head>
-<script type="text/css">
+<style type="text/css">
 .thead{
     font-weight: bold;
     font-size: large
 }
-</script>
+</style>
 </head>
 <body>
 <table>
