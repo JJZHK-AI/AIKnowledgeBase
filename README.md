@@ -1,15 +1,5 @@
 AI基础知识库
 ===
-<table style="width: 100%">
-<tr style="font-weight: bold;font-size: larger">
-<th>总目</th>
-<th>细分类</th>
-<th>内容</th>
-</tr>
-<tr>
-<td>基础知识</td>
-<td>概述</td>
-<td>[link](01.基础知识.07.凸优化-05.牛顿法.ipynb)</td>
-</tr>
-</table>
+主要包括AI相关的一些基础知识，包括数学，神经网络，图像分类，目标识别，图像分割，对抗神经网络，强化学习等等
+
 
