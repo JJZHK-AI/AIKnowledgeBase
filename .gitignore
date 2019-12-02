@@ -1,7 +1,3 @@
 # Created by .ignore support plugin (hsz.mobi)
-.idea/.gitignore
-.idea/AIKnowledgeBase.iml
-.idea/inspectionProfiles/
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
+.vscode/
+__pycache__
