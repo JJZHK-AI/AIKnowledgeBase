@@ -1,7 +1,5 @@
 import math
-import numpy as np
 import functools as ft
-
 
 class Op(object):
     def __init__(self):
@@ -293,7 +291,7 @@ if __name__ == '__main__':
     import ELib.pyn.cnn.functions as epcf
 
     plt.figure(figsize=(10, 10), facecolor='w')
-    imagePath = "../../../Results/03/01/ConvVisible01.jpg"
+    imagePath = "../data/ConvVisible01.jpg"
     img = cv2.imread(imagePath)
     basicImage = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     originImg = cv2.resize(basicImage, (224, 224))

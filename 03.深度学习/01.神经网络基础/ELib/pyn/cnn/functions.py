@@ -9,6 +9,8 @@
 '''
 import cv2
 import numpy as np
+
+
 def preprocess_image(cv2im, resize_im=True):
     # mean and std list for channels (Imagenet)
     mean = [0.485, 0.456, 0.406]
