@@ -1,5 +1,6 @@
 import math
 import functools as ft
+import numpy as np
 
 class Op(object):
     def __init__(self):
@@ -280,45 +281,44 @@ class Softmax(object):
             self.eta[i, self.label[i]] -= 1
         return self.eta
 
-if __name__ == '__main__':
-    import cv2
-    import matplotlib.pyplot as plt
-    import numpy as np
-
-    import torchvision.models as models
-    import torch
-    import ELib.pyn.cnn.python_layer as epcl
-    import ELib.pyn.cnn.functions as epcf
-
-    plt.figure(figsize=(10, 10), facecolor='w')
-    imagePath = "../data/ConvVisible01.jpg"
-    img = cv2.imread(imagePath)
-    basicImage = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    originImg = cv2.resize(basicImage, (224, 224))
-    plt.subplot(1, 3, 1)
-    plt.title('Origin')
-    plt.imshow(originImg)
-
-    conv1 = epcl.Conv2D(3, 64, 3, 1, 'SAME')
-    img = epcf.preprocess_image(basicImage).transpose((0, 2, 3, 1))
-    features = conv1(img)
-    feature = features[:, :, :, 0]
-    feature = np.reshape(feature, newshape=(feature.shape[1], feature.shape[2]))
-    feature = 1.0 / (1 + np.exp(-1 * feature))
-    feature = np.round(feature * 255)
-    plt.subplot(1, 3, 2)
-    plt.title('Conv2D')
-    plt.imshow(feature, cmap='gray')
-
-    model = models.vgg16(pretrained=True).features
-    img = epcf.preprocess_image(basicImage)
-    features = model[0](torch.autograd.Variable(torch.FloatTensor(img)))
-    feature = features[:, 0, :, :]
-    feature = feature.view(feature.shape[1], feature.shape[2])
-    feature = feature.data.numpy()
-    feature = 1.0 / (1 + np.exp(-1 * feature))
-    feature = np.round(feature * 255)
-    plt.subplot(1, 3, 3)
-    plt.title('Pytorch Conv2D')
-    plt.imshow(feature, cmap='gray')
-    plt.show()
+# if __name__ == '__main__':
+#     import cv2
+#     import matplotlib.pyplot as plt
+#     import numpy as np
+#
+#     import torchvision.models as models
+#     import torch
+#     import functions as epcf
+#
+#     plt.figure(figsize=(10, 10), facecolor='w')
+#     imagePath = "../../../data/ConvVisible01.jpg"
+#     img = cv2.imread(imagePath)
+#     basicImage = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+#     originImg = cv2.resize(basicImage, (224, 224))
+#     plt.subplot(1, 3, 1)
+#     plt.title('Origin')
+#     plt.imshow(originImg)
+#
+#     conv1 = Conv2D(3, 64, 3, 1, 'SAME')
+#     img = epcf.preprocess_image(basicImage).transpose((0, 2, 3, 1))
+#     features = conv1(img)
+#     feature = features[:, :, :, 0]
+#     feature = np.reshape(feature, newshape=(feature.shape[1], feature.shape[2]))
+#     feature = 1.0 / (1 + np.exp(-1 * feature))
+#     feature = np.round(feature * 255)
+#     plt.subplot(1, 3, 2)
+#     plt.title('Conv2D')
+#     plt.imshow(feature, cmap='gray')
+#
+#     model = models.vgg16(pretrained=True).features
+#     img = epcf.preprocess_image(basicImage)
+#     features = model[0](torch.autograd.Variable(torch.FloatTensor(img)))
+#     feature = features[:, 0, :, :]
+#     feature = feature.view(feature.shape[1], feature.shape[2])
+#     feature = feature.data.numpy()
+#     feature = 1.0 / (1 + np.exp(-1 * feature))
+#     feature = np.round(feature * 255)
+#     plt.subplot(1, 3, 3)
+#     plt.title('Pytorch Conv2D')
+#     plt.imshow(feature, cmap='gray')
+#     plt.show()
