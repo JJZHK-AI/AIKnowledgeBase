@@ -8,11 +8,11 @@
 @desc: 
 '''
 import skimage.io as si
-import ELib.pyt.nuwa.utils as epnu
-import ELib.utils.progressbar as eup
-
+import JLib.utils as utils
 import torch
-import ELib.utils.imageutil as epi
+import jjzhk.imageutils  as iu
+import jjzhk.progressbar as bar
+
 
 class SimpleMLP(torch.nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
@@ -29,11 +29,11 @@ DIMENSION = 2
 iterations = 3000
 bs = 2000
 
-INPUT_IMAGE_PATH = "./inputs/batman.jpg"
+INPUT_IMAGE_PATH = "inputs/batman.jpg"
 density_img = si.imread(INPUT_IMAGE_PATH, True)
-lut_2d = epnu.generate_lut(density_img)
+lut_2d = utils.generate_lut(density_img)
 
-visualizer = epnu.GANDemoVisualizer('GAN 2D Example Visualization of {}'.format(INPUT_IMAGE_PATH))
+visualizer = utils.GANDemoVisualizer('GAN 2D Example Visualization of {}'.format(INPUT_IMAGE_PATH))
 generator = SimpleMLP(input_size=z_dim, hidden_size=50, output_size=DIMENSION)
 discriminator = SimpleMLP(input_size=DIMENSION, hidden_size=100, output_size=1)
 
@@ -44,7 +44,7 @@ if torch.cuda.is_available():
 criterion = torch.nn.BCELoss()
 d_optimizer = torch.optim.Adadelta(discriminator.parameters(), lr=1)
 g_optimizer = torch.optim.Adadelta(generator.parameters(), lr=1)
-proBar = eup.ProgressBar(1, iterations, "D Loss:(real/fake) %.3f/%.3f,G Loss:%.3f")
+proBar = bar.ProgressBar(1, iterations, "D Loss:(real/fake) %.3f/%.3f,G Loss:%.3f")
 
 for train_iter in range(1, iterations + 1):
     for d_index in range(3):
@@ -52,7 +52,7 @@ for train_iter in range(1, iterations + 1):
         discriminator.zero_grad()
 
         #  1A: Train D on real
-        real_samples = epnu.sample_2d(lut_2d, bs)
+        real_samples = utils.sample_2d(lut_2d, bs)
         d_real_data = torch.autograd.Variable(torch.Tensor(real_samples))
         if torch.cuda.is_available() > 0:
             d_real_data = d_real_data.cuda()
@@ -110,6 +110,5 @@ for train_iter in range(1, iterations + 1):
         visualizer.draw(real_samples, gen_samples, msg, show=False)
         visualizer.savefig('outputs/Pytorch_Batman_%04d' % train_iter)
 
-maker = epi.ImageToGif()
+maker = iu.ImageToGif()
 maker.makeGif("outputs")
-torch.save(generator.state_dict(), "outputs/GAN_Batman_Pytorch_Generator.pth")
