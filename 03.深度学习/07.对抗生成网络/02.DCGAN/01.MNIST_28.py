@@ -9,21 +9,20 @@
 '''
 import torch
 import torchvision as tv
-import os
-import ELib.pyt.nuwa.dataset as epfd
-import ELib.utils.progressbar as eup
+import matplotlib.pyplot as plt
+import numpy as np
 
-DATA_PATH = "/data/input/mnist.npz"
+import sys
+sys.path.append("../")
+import jjzhk.progressbar as bar
+
+DATA_PATH = "/Users/JJZHK/data/input/"
 EPOCHS = 100
 BATCH_SIZE = 128
 IMAGE_SIZE = 28
 IMAGE_CHANNEL = 1
 NOISE_DIM = 100
 LEARNING_RATE = 2e-4
-
-if not os.path.exists('outputs'):
-    os.mkdir('outputs')
-
 
 def initialize_weights(net):
     for m in net.modules():
@@ -36,7 +35,6 @@ def initialize_weights(net):
         elif isinstance(m, torch.nn.Linear):
             m.weight.data.normal_(0, 0.02)
             m.bias.data.zero_()
-
 
 class Generator(torch.nn.Module):
     def __init__(self):
@@ -114,16 +112,24 @@ if torch.cuda.is_available():
 fix_noise_var = torch.autograd.Variable(fix_noise)
 transform = tv.transforms.Compose([tv.transforms.ToTensor()])
 
-dataset = epfd.MNISTDataSetForPytorch(root=DATA_PATH, train=True, transform=transform)
-dataLoader = torch.utils.data.DataLoader(dataset, BATCH_SIZE, shuffle=True)
+train_dataset = tv.datasets.MNIST(root=DATA_PATH,
+                               train=True,
+                               transform=transform,
+                               download=True)
 
-bar = eup.ProgressBar(EPOCHS, len(dataLoader), "D Loss:%.3f;G Loss:%.3f")
+train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
+                          batch_size=BATCH_SIZE,
+                          shuffle=True)
+
+
+
+bar = bar.ProgressBar(EPOCHS, len(train_loader), "D Loss:%.3f;G Loss:%.3f")
 for epoch in range(1, EPOCHS + 1):
     if epoch % 30 == 0:
         optimizerD.param_groups[0]['lr'] /= 10
         optimizerG.param_groups[0]['lr'] /= 10
 
-    for ii, data in enumerate(dataLoader,0):
+    for ii, data in enumerate(train_loader,0):
         input,_=data
         label_real = torch.ones(input.size(0))
         label_fake = torch.zeros(input.size(0))
@@ -162,8 +168,8 @@ for epoch in range(1, EPOCHS + 1):
         optimizerG.step()
         bar.show(epoch, error_D.item(), error_G.item())
 
-    fake_u=NetG(fix_noise_var)
-
-    tv.utils.save_image(fake_u.data[:100], "outputs/MNIST_%03d.png" % epoch,nrow=10)
+fake_u=NetG(fix_noise_var)
+img = tv.utils.make_grid(fake_u.data[:100], nrow=10)
+plt.imshow(np.transpose(img, (1, 2, 0)))
 
 

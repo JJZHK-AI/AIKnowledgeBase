@@ -8,9 +8,9 @@
 @desc: 
 '''
 import skimage.io as si
-import ELib.pyt.nuwa.utils as epnu
-import ELib.utils.progressbar as eup
-import ELib.utils.imageutil as epi
+import JLib.utils as epnu
+import jjzhk.progressbar as eup
+import jjzhk.imageutil as epi
 import torch
 import os
 import numpy
