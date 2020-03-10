@@ -195,4 +195,5 @@ for epoch in range(1, EPOCH + 1):
 
         bar.show(epoch, errD.item(), errG.item())
     fake_test = NetG(z_test)
-    tv.utils.save_image(fake_test.data, 'outputs/Cat128_%03d.png' %epoch, nrow=10, normalize=True)
+    tv.utils.save_image(fake_test.data, 'outputs/Cat128_%03d.png' %epoch, 
+    nrow=10, normalize=True)

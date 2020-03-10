@@ -184,4 +184,5 @@ for epoch in range(1, EPOCH + 1):
         bar.show(epoch, error_d.item(), error_g.item())
 
     fix_fake_imgs = NetG(fix_noises)
-    tv.utils.save_image(fix_fake_imgs.data,'outputs/AnimateFace_%03d.png' % epoch,nrow=10, normalize=True)
+    tv.utils.save_image(fix_fake_imgs.data,
+    'outputs/AnimateFace_%03d.png' % epoch,nrow=10, normalize=True)
