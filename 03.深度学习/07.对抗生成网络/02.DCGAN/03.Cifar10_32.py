@@ -9,10 +9,14 @@
 '''
 import torch
 import torchvision as tv
-import ELib.utils.progressbar as eup
-import ELib.pyt.nuwa.dataset as epfd
+import matplotlib.pyplot as plt
+import numpy as np
 
-DATA_PATH = '/data/input/cifar10'
+import sys
+sys.path.append("../")
+import jjzhk.progressbar as bar
+
+DATA_PATH = '/Users/JJZHK/data/input/'
 IMAGE_CHANNEL = 3
 IMAGE_SIZE = 32
 LEARNING_RATE = 2e-4
