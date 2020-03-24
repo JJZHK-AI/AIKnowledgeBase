@@ -22,4 +22,3 @@ AI基础知识库
 5. 浙江大学概率与统计公开课
 6. [Morvan的学习资料](https://morvanzhou.github.io/)
 7. 其它的一些网络资料
-:ok_hand:
