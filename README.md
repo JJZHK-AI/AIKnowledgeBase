@@ -13,7 +13,7 @@ AI基础知识库
 # 4. 强化学习
 强化学习主要总结了常用的强化学习算法
 
-参考资料U+1F970
+参考资料:soccer:
 ===
 1. [senliuy的gitbook资料](https://senliuy.gitbooks.io/advanced-deep-learning)
 2. [fourmi_gsj的博客](https://www.cnblogs.com/fourmi)
