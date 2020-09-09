@@ -1,5 +1,6 @@
 AI基础知识库
 ===
+![Images](https://img.shields.io/badge/%E7%9F%A5%E8%AF%86%E5%BA%93-%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%E4%B8%AD-ff69b4?style=plastic&logo=appveyor)
 本项目是我这两三年研究的人工智能方面的一些总结，主要包括如下内容
 # 1. 基础知识
 基础知识包括九个部分，分别是微积分、矩阵与线性代数、概率论、数理统计、参数评估、数据降维、凸优化、图片基本处理以及一些小知识
