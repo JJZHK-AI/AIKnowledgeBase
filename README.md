@@ -24,3 +24,6 @@ AI基础知识库
 5. 浙江大学概率与统计公开课
 6. [Morvan的学习资料](https://morvanzhou.github.io/)
 7. 其它的一些网络资料
+
+# 捐助
+<img src='https://images.gitee.com/uploads/images/2020/0909/153732_ba1bfd06_956405.png' height='450' width='750'/>
