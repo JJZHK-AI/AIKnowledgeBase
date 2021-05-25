@@ -5,6 +5,10 @@ import math
 
 class Conv2D(object):
     def __init__(self, shape, output_channels, ksize=3, stride=1, method='VALID'):
+        '''
+        shape: 1, 224, 224, 3
+        output_channels: 12
+        '''
         self.input_shape = shape
         self.output_channels = output_channels
         self.input_channels = shape[-1]
@@ -13,20 +17,22 @@ class Conv2D(object):
         self.ksize = ksize
         self.method = method
 
-        weights_scale = math.sqrt(reduce(lambda x, y: x * y, shape) / self.output_channels)
-        self.weights = np.random.standard_normal(
-            (ksize, ksize, self.input_channels, self.output_channels)) / weights_scale
-        self.bias = np.random.standard_normal(self.output_channels) / weights_scale
+        param1 = reduce(lambda x, y: x * y, shape) # shape[0] * shape[1] * shape[2] * shape[3]
+        weights_scale = math.sqrt( param1 / self.output_channels)
+        param2 = np.random.standard_normal((ksize, ksize, self.input_channels, self.output_channels)) # 3, 3, 3, 12
+        self.weights = param2 / weights_scale # 3, 3, 3, 12
+        param3 = np.random.standard_normal(self.output_channels)    # 12,
+        self.bias = param3 / weights_scale  # 12,
 
         if method == 'VALID':
             self.eta = np.zeros((shape[0], int((shape[1] - ksize + 1) / self.stride),
                                  int((shape[1] - ksize + 1) / self.stride),
-             self.output_channels))
+                                 self.output_channels)) # 1, 112, 112, 12
 
         if method == 'SAME':
             self.eta = np.zeros((shape[0], int(shape[1]/self.stride),
                                  int(shape[2]/self.stride),
-                                 self.output_channels))
+                                 self.output_channels))   # 1, 224, 224, 12
 
         self.w_gradient = np.zeros(self.weights.shape)
         self.b_gradient = np.zeros(self.bias.shape)
@@ -38,12 +44,10 @@ class Conv2D(object):
             print('input tensor height can\'t fit stride')
 
     def forward(self, x):
-        col_weights = self.weights.reshape([-1, self.output_channels])
+        col_weights = self.weights.reshape([-1, self.output_channels]) # 3*3*3, 12
         if self.method == 'SAME':
-            x = np.pad(x,
-                       ((0, 0),
-                        (int(self.ksize / 2), int(self.ksize / 2)),
-                        (int(self.ksize / 2), int(self.ksize / 2)),
+            x = np.pad(x,((0, 0), (int(self.ksize / 2), int(self.ksize / 2)),
+                          (int(self.ksize / 2), int(self.ksize / 2)),
                         (0, 0)),
                        'constant',
                        constant_values=0)
@@ -51,9 +55,17 @@ class Conv2D(object):
         self.col_image = []
         conv_out = np.zeros(self.eta.shape)
         for i in range(self.batchsize):
-            img_i = x[i][np.newaxis, :]
-            self.col_image_i = self._im2col_(img_i, self.ksize, self.stride)
-            conv_out[i] = np.reshape(np.dot(self.col_image_i, col_weights) + self.bias, self.eta[0].shape)
+            img_i = x[i][np.newaxis, :] # 1, 226, 226, 3
+            self.col_image_i = self._im2col_(img_i, self.ksize, self.stride) # 51076， 27
+
+            '''
+            col_image_i: (51076 = 224 * 224, 3*3*3)
+            col_weights: (27, 12)
+            bias: (12,)
+            '''
+            wxb = np.dot(self.col_image_i, col_weights) + self.bias # (51076, 12)
+
+            conv_out[i] = np.reshape(wxb, self.eta[0].shape) # (?, 224, 224, 12)
             self.col_image.append(self.col_image_i)
         self.col_image = np.array(self.col_image)
         return conv_out
@@ -96,15 +108,14 @@ class Conv2D(object):
         self.b_gradient = np.zeros(self.bias.shape)
 
     def _im2col_(self, image, ksize, stride):
-        # image is a 4d tensor([batchsize, width ,height, channel])
         image_col = []
         for i in range(0, image.shape[1] - ksize + 1, stride):
             for j in range(0, image.shape[2] - ksize + 1, stride):
-                col = image[:, i:i + ksize, j:j + ksize, :].reshape([-1])
+                col = image[:, i:i + ksize, j:j + ksize, :].reshape([-1]) # (3*3*3,)
                 image_col.append(col)
         image_col = np.array(image_col)
 
-        return image_col
+        return image_col # (224 * 224, 27)
 
 
 class MaxPooling(object):
